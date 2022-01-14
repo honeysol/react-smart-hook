@@ -1,0 +1,19 @@
+{
+  "name": "package-a",
+  "version": "1.0.0",
+  "description": "Typescript + Rollup starter",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {},
+  "scripts": {
+    "build": "rm -rf ./dist; rollup -c",
+    "watch": "rm -rf ./dist; rollup -w -c",
+    "tsc": "tsc",
+    "lint": "eslint ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "echo": "echo this is package-a"
+  },
+  "author": "",
+  "license": "ISC"
+}
