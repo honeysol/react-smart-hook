@@ -1,5 +1,5 @@
 {
-  "name": "react-hook-retention-cache",
+  "name": "@norami/react-hook-retention-cache",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",

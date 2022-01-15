@@ -7,7 +7,7 @@ import {
 import {
   retentionCache,
   createStoreCacheHook,
-} from "react-hook-retention-cache";
+} from "@norami/react-hook-retention-cache";
 import { createEmitter, type Unsubscriber } from "./util";
 
 export type QueryResult<D> = {

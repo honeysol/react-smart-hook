@@ -7,10 +7,8 @@ import {
 import {
   retentionCache,
   createStoreCacheHook,
-} from "react-hook-retention-cache";
+} from "@norami/react-hook-retention-cache";
 import { createEmitter, type Unsubscriber } from "./util";
-
-const a = "abc";
 
 export type DocumentResult<D> = {
   snapshot?: DocumentSnapshot<D>;

@@ -1,7 +1,7 @@
 {
-  "name": "ts-rollup",
+  "name": "react-smart-hook",
   "version": "1.0.0",
-  "description": "Typescript + Rollup starter",
+  "description": "React hooks with automatic cache retention",
   "main": "dist/index.js",
   "private": "true",
   "module": "dist/index.esm.js",
