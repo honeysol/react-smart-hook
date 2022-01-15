@@ -1,12 +1,12 @@
 {
   "name": "@norami/react-smart-hook-firebase",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Typescript + Rollup starter",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@norami/react-hook-retention-cache": "^0.0.1",
+    "@norami/react-hook-retention-cache": "^0.0.2",
     "firebase": "^9.6.3"
   },
   "scripts": {
