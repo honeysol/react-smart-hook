@@ -4,7 +4,7 @@ import {
   createStoreCacheHook,
   Store,
   retentionCache,
-} from "@norami/react-hook-retention-cache";
+} from "@smart-hook/react-hook-retention-cache";
 import { createEmitter } from "./util";
 
 import deepEqual from "fast-deep-equal";

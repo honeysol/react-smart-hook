@@ -1,12 +1,12 @@
 {
-  "name": "@norami/react-smart-hook-firebase",
+  "name": "@smart-hook/react-smart-hook-firebase",
   "version": "0.0.3",
   "description": "firebase hooks with high performance",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@norami/react-hook-retention-cache": "^0.0.2",
+    "@smart-hook/react-hook-retention-cache": "^0.0.2",
     "firebase": "^9.6.3"
   },
   "scripts": {
@@ -16,5 +16,6 @@
     "echo": "echo this is react-smart-hook-firebase"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "gitHead": "f9b8f764cab95e21e66682e450d86c50e45f245d"
 }
