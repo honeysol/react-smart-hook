@@ -1,12 +1,12 @@
 {
   "name": "@smart-hook/react-smart-hook-firebase",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "firebase hooks with high performance",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@smart-hook/react-hook-retention-cache": "^0.0.2",
+    "@smart-hook/react-hook-retention-cache": "^0.0.3",
     "firebase": "^9.6.3"
   },
   "scripts": {
