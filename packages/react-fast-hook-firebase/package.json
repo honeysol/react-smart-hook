@@ -1,6 +1,6 @@
 {
   "name": "@norami/react-smart-hook-firebase",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "firebase hooks with high performance",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
