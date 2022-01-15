@@ -30,9 +30,8 @@
   "scripts": {
     "build": "lerna run build",
     "lint": "lerna run lint",
-    "watch": "lerna run --pararell watch",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "echo": "echo this is root"
+    "echo": "lerna run echo",
+    "watch": "lerna run --pararell watch"
   },
   "author": "",
   "license": "ISC"
