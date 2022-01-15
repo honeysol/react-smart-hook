@@ -8,10 +8,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-eslint": "^8.0.1",
@@ -37,5 +33,5 @@
     "watch": "lerna run --pararell watch"
   },
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
