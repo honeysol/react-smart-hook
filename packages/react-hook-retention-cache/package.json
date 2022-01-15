@@ -1,7 +1,7 @@
 {
   "name": "@norami/react-hook-retention-cache",
   "version": "0.0.1",
-  "description": "",
+  "description": "React hooks to automatic cache retention",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
