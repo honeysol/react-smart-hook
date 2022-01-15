@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "React hooks with automatic cache retention",
   "main": "dist/index.js",
-  "private": "true",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "workspaces": [
