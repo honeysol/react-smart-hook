@@ -6,6 +6,7 @@ import { terser } from "rollup-plugin-terser";
 import sourcemaps from "rollup-plugin-sourcemaps";
 import { cjsEntryPlugin } from "./rollup/cjs-entry-plugin";
 import * as path from "path";
+import { escapeRegExp } from "lodash";
 
 const extensions = [".ts", ".tsx", ".json"];
 
@@ -48,8 +49,7 @@ export const rollUpConfig = (pkg) => {
     external: [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {}),
-      ...Object.keys(pkg.externals || {}),
-    ],
+    ].map((id) => RegExp("^" + escapeRegExp(id) + "($|/)")),
     plugins: [
       eslint(),
       typescript({ rollupCommonJSResolveHack: true, clean: true }),
