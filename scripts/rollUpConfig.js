@@ -11,7 +11,7 @@ const extensions = [".ts", ".tsx", ".json"];
 
 export const rollUpConfig = (pkg) => {
   const distDir = "./" + path.dirname(path.normalize(pkg.main));
-  const packageName = pkg.name;
+  const packageName = path.basename(pkg.name);
   const BUILD_TYPE = {
     CJS_DEV: { format: "cjs", env: "development" },
     CJS_PROD: { format: "cjs", env: "production", minify: true },
@@ -48,6 +48,7 @@ export const rollUpConfig = (pkg) => {
     external: [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {}),
+      ...Object.keys(pkg.externals || {}),
     ],
     plugins: [
       eslint(),
