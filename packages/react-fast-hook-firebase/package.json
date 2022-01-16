@@ -1,6 +1,6 @@
 {
   "name": "@smart-hook/react-smart-hook-firebase",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "firebase hooks with high performance",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
