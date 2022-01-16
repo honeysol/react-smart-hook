@@ -7,7 +7,7 @@ React hook for Firebase based on `react-hook-retention-cache`.
 Firebase has an original excellent caching mechanism. In an example of firestore, if you have effective onSnapshot subscription, you can use a cached value via `getDocFromCache`, `getDoc` or other `onSnapshot` subscriptions. But this mechanism has a severe limitation.
 
 1. You can only get value asynchronously, even if it has been cached. (`getDocFromCache` can only return Promise)
-2. If a React component subscribe Firebase resource and unsubscribe in `unmount`, a cache of a value is also released. And next page cannot use cache. This behaviour cannot be changes at least you use react-firebase-react-hook.
+2. If a React component subscribes firestore resource and unsubscribe in `unmount`, a cache of a value is also released. And next page cannot use cache. This behaviour cannot be changes at least you use react-firebase-react-hook.
 
 This package resolve these problems with smart caching mechanism privided by `react-hook-retention-cache`.
 
