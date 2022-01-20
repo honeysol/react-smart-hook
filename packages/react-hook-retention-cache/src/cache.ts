@@ -115,3 +115,10 @@ export const useCache = <V, P>(param: P, cache: RetentionCache<V, P>) => {
   }, [item]);
   return item.value;
 };
+
+export const useCacheItem = <V>(item: RetentionItem<V>) => {
+  useEffect(() => {
+    return item.subscribe();
+  }, [item]);
+  return item.value;
+};
