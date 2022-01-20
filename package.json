@@ -30,7 +30,8 @@
     "build": "lerna run build",
     "lint": "lerna run lint",
     "echo": "lerna run echo",
-    "watch": "lerna run --pararell watch"
+    "watch": "lerna run --pararell watch",
+    "publish": "npm run build; lerna publish"
   },
   "author": "",
   "license": "MIT"
