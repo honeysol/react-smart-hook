@@ -10,13 +10,13 @@ export interface Store<C> {
 
 export type ContentOfStore<S> = S extends Store<infer C> ? C : never;
 
-export const useStore = <C>(store: Store<C>) => {
-  const [content, setContent] = useState<C>(store.current);
+export const useStore = <C>(store: Store<C> | undefined) => {
+  const [content, setContent] = useState<C | undefined>(store?.current);
   useMemo(() => {
-    setContent(store.current);
+    setContent(store?.current);
   }, [store]);
   useEffect(() => {
-    return store.on((value) => {
+    return store?.on((value) => {
       setContent(value);
     });
   }, [store]);
