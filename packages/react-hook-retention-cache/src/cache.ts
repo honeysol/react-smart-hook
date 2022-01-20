@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { stringify } from "./stringify";
 type Unsubscriber = () => void;
 
-class RetentionItem<V> {
+export class RetentionItem<V> {
   value: V;
   private retentionTime?: number;
   private counter = 0;
