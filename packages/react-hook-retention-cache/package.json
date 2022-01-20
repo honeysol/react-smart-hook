@@ -1,7 +1,7 @@
 {
   "name": "@smart-hook/react-hook-retention-cache",
   "version": "0.0.7",
-  "description": "React hooks to automatic cache retention",
+  "description": "React hooks to automatic cache retention.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
