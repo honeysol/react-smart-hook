@@ -74,7 +74,7 @@ export const createQueryHook = <D, P = undefined>(
 };
 
 // experimental. using private API (Query._query)
-export const createQueryRefHook = <D>(
+export const createQueryRefHook = (<D>(
   { withData, retentionTime }: UseQueryOption = { retentionTime: 1000 }
 ) => {
   const cache = retentionCache({
@@ -86,4 +86,4 @@ export const createQueryRefHook = <D>(
     retentionTime,
   });
   return createStoreCacheHook(cache);
-};
+}) as (options?: UseQueryOption) => <D>(params: Query<D>) => QueryResult<D>;

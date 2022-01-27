@@ -69,7 +69,7 @@ export function createDocumentHook<D, P = undefined>(
   return createStoreCacheHook(cache);
 }
 
-export const createDocumentRefHook = <D>(
+export const createDocumentRefHook = (<D>(
   { withData, retentionTime }: UseDocumentOption = { retentionTime: 1000 }
 ) => {
   const cache = retentionCache({
@@ -80,4 +80,6 @@ export const createDocumentRefHook = <D>(
     retentionTime,
   });
   return createStoreCacheHook(cache);
-};
+}) as (
+  options?: UseDocumentOption
+) => <D>(params: DocumentReference<D>) => DocumentResult<D>;
