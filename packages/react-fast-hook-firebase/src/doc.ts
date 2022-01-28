@@ -10,6 +10,8 @@ import {
 } from "@smart-hook/react-hook-retention-cache";
 import { createEmitter, type Unsubscriber } from "./util";
 
+type emptyObject = { [P in string]: never };
+
 export type DocumentResult<D> = {
   snapshot?: DocumentSnapshot<D>;
   error?: FirestoreError;
@@ -56,7 +58,7 @@ export type UseDocumentOption = {
   retentionTime?: number | undefined;
 };
 
-export function createDocumentHook<D, P = undefined>(
+export function createDocumentHook<D, P>(
   refGenerator: (params: P) => DocumentReference<D>,
   { withData, retentionTime }: UseDocumentOption = { retentionTime: 1000 }
 ) {
@@ -66,7 +68,20 @@ export function createDocumentHook<D, P = undefined>(
     cleanUp: (v) => v.close(),
     retentionTime,
   });
-  return createStoreCacheHook(cache);
+  return createStoreCacheHook(cache, {} as emptyObject);
+}
+
+export function createFixedDocumentHook<D>(
+  refGenerator: () => DocumentReference<D>,
+  { withData, retentionTime }: UseDocumentOption = { retentionTime: 1000 }
+) {
+  const cache = retentionCache({
+    generator: (_param: true) =>
+      new DocumentStore<D>(refGenerator(), withData !== false),
+    cleanUp: (v) => v.close(),
+    retentionTime,
+  });
+  return createStoreCacheHook(cache, {} as emptyObject).bind(null, true);
 }
 
 export const createDocumentRefHook = (<D>(
@@ -79,7 +94,9 @@ export const createDocumentRefHook = (<D>(
     cleanUp: (v) => v.close(),
     retentionTime,
   });
-  return createStoreCacheHook(cache);
+  return createStoreCacheHook(cache, {} as emptyObject);
 }) as (
   options?: UseDocumentOption
-) => <D>(params: DocumentReference<D>) => DocumentResult<D>;
+) => <D>(
+  params: DocumentReference<D> | undefined | null
+) => DocumentResult<D> | emptyObject;

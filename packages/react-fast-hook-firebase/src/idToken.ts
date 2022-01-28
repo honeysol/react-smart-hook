@@ -10,6 +10,7 @@ import { createEmitter } from "./util";
 import deepEqual from "fast-deep-equal";
 
 type Unsubscriber = () => void;
+type emptyObject = { [P in string]: never };
 
 export type IdTokenResult<D> = {
   error?: Error;
@@ -77,5 +78,5 @@ export const createIdTokenHook = <D>(
     cleanUp: (v) => v.close(),
     retentionTime,
   });
-  return createStoreCacheHook(cache);
+  return createStoreCacheHook(cache, {} as emptyObject);
 };

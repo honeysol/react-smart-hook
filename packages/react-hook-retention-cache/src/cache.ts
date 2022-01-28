@@ -105,15 +105,18 @@ class RetentionCache<V, P> {
 
 export type { RetentionCache };
 
-export const useCache = <V, P>(param: P, cache: RetentionCache<V, P>) => {
+export const useCache = <V, P>(
+  param: P | undefined | null,
+  cache: RetentionCache<V, P>
+) => {
   const item = useMemo(
-    (): RetentionItem<V> => cache.getItem(param),
+    () => (param == null ? undefined : cache.getItem(param)),
     [cache, param]
   );
   useEffect(() => {
-    return item.subscribe();
+    return item?.subscribe();
   }, [item]);
-  return item.value;
+  return item?.value;
 };
 
 export const useCacheItem = <V>(item: RetentionItem<V>) => {

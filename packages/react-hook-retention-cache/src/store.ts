@@ -25,18 +25,17 @@ export const useStore = <C>(store: Store<C> | undefined) => {
 
 export function useStoreCache<S extends Store<unknown>, P>(
   cache: RetentionCache<S, P>,
-  params: P
+  params: P | undefined | null
 ) {
   const store = useCache(params, cache) as Store<ContentOfStore<S>>;
-  return useStore(store);
+  return useStore(store) || undefined;
 }
 
-export function createStoreCacheHook<S extends Store<unknown>, P>(
-  cache: RetentionCache<S, P>
+export function createStoreCacheHook<S extends Store<unknown>, P, V>(
+  cache: RetentionCache<S, P>,
+  defaultValue: V
 ) {
-  return ((params: P) => {
-    return useStoreCache(cache, params);
-  }) as P extends undefined
-    ? () => ContentOfStore<S>
-    : (params: P) => ContentOfStore<S>;
+  return (params: P | undefined | null) => {
+    return useStoreCache(cache, params) || defaultValue;
+  };
 }

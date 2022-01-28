@@ -10,6 +10,8 @@ import {
 } from "@smart-hook/react-hook-retention-cache";
 import { createEmitter, type Unsubscriber } from "./util";
 
+type emptyObject = { [P in string]: never };
+
 export type QueryResult<D> = {
   snapshot?: QuerySnapshot<D>;
   error?: FirestoreError;
@@ -60,7 +62,7 @@ export type UseQueryOption = {
   retentionTime?: number | undefined;
 };
 
-export const createQueryHook = <D, P = undefined>(
+export const createQueryHook = <D, P>(
   refGenerator: (params: P) => Query<D>,
   { withData, retentionTime }: UseQueryOption = { retentionTime: 1000 }
 ) => {
@@ -70,7 +72,20 @@ export const createQueryHook = <D, P = undefined>(
     cleanUp: (v) => v.close(),
     retentionTime,
   });
-  return createStoreCacheHook(cache);
+  return createStoreCacheHook(cache, {} as emptyObject);
+};
+
+export const createFixedQueryHook = <D>(
+  refGenerator: () => Query<D>,
+  { withData, retentionTime }: UseQueryOption = { retentionTime: 1000 }
+) => {
+  const cache = retentionCache({
+    generator: (_params: true) =>
+      new QueryStore<D>(refGenerator(), withData !== false),
+    cleanUp: (v) => v.close(),
+    retentionTime,
+  });
+  return createStoreCacheHook(cache, {} as emptyObject).bind(null, true);
 };
 
 // experimental. using private API (Query._query)
@@ -85,5 +100,7 @@ export const createQueryRefHook = (<D>(
     cleanUp: (v) => v.close(),
     retentionTime,
   });
-  return createStoreCacheHook(cache);
-}) as (options?: UseQueryOption) => <D>(params: Query<D>) => QueryResult<D>;
+  return createStoreCacheHook(cache, {} as emptyObject);
+}) as (
+  options?: UseQueryOption
+) => <D>(params: Query<D> | undefined | null) => QueryResult<D> | emptyObject;
