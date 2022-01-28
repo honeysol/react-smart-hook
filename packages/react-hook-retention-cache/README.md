@@ -99,7 +99,18 @@ declare function useStoreCache<S extends Store<unknown>, P>(cache: RetentionCach
 
 ## createStoreCacheHook
 ```ts
-declare function createStoreCacheHook<S extends Store<unknown>, P>(cache: RetentionCache<S, P>): (params: P | undefined | null) => ContentOfStore<S> | undefined;
+declare function createStoreCacheHook<S extends Store<unknown>, P, V>(cache: RetentionCache<S, P>, defaultValue: V): (params: P | undefined | null) => V | ContentOfStore<S>;
 ```
 
 `createStoreCacheHook` creates partial application of useStoreCache which RetentionCache is binded with. By this solution, you don't have to be aware of RetentionCache in application code.
+
+Hack:
+If you want the only store in cache, create a retention cache with non-null parameter (for example true) and bind the same value.
+```
+const cache = retentionCache({
+  generator: (_param: true) => new SomeStore<D>(),
+  cleanUp: (v) => v.close(),
+  retentionTime,
+});
+createStoreCacheHook(cache, {} as never).bind(null, true)
+```

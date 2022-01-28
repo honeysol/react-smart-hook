@@ -85,7 +85,7 @@ export const createFixedQueryHook = <D>(
     cleanUp: (v) => v.close(),
     retentionTime,
   });
-  return createStoreCacheHook(cache, {} as emptyObject).bind(null, true);
+  return createStoreCacheHook(cache, {} as never).bind(null, true);
 };
 
 // experimental. using private API (Query._query)
