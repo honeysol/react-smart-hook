@@ -74,9 +74,9 @@ export const createIdTokenHook = <D>(
   }
 ) => {
   const cache = retentionCache({
-    generator: () => new IdTokenStore<D>(auth, projector),
+    generator: (_param: true) => new IdTokenStore<D>(auth, projector),
     cleanUp: (v) => v.close(),
     retentionTime,
   });
-  return createStoreCacheHook(cache, {} as emptyObject);
+  return createStoreCacheHook(cache, {} as emptyObject).bind(null, true);
 };
