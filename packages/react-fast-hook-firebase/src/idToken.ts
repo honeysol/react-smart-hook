@@ -10,7 +10,6 @@ import { createEmitter } from "./util";
 import deepEqual from "fast-deep-equal";
 
 type Unsubscriber = () => void;
-type emptyObject = { [P in string]: never };
 
 export type IdTokenResult<D> = {
   error?: Error;
@@ -25,7 +24,7 @@ class IdTokenStore<D> implements Store<IdTokenResult<D>> {
   private unsubscriber: Unsubscriber;
   constructor(
     auth: Auth,
-    projector: (claims?: ParsedToken | undefined, user?: User) => D
+    projector: (user?: User, claims?: ParsedToken | undefined) => D
   ) {
     this.unsubscriber = onIdTokenChanged(
       auth,
@@ -42,7 +41,7 @@ class IdTokenStore<D> implements Store<IdTokenResult<D>> {
               console.log("force refresh for persistent login");
             }
             const idTokenResult = await user.getIdTokenResult(isFirstTimeLocal);
-            return projector(idTokenResult?.claims, user);
+            return projector(user, idTokenResult?.claims);
           }
         })();
         if (!deepEqual(this.current?.data, value)) {
@@ -68,7 +67,7 @@ class IdTokenStore<D> implements Store<IdTokenResult<D>> {
 
 export const createIdTokenHook = <D>(
   auth: Auth,
-  projector: (claims?: ParsedToken, user?: User) => D,
+  projector: (user?: User, claims?: ParsedToken) => D,
   { retentionTime }: { retentionTime: number | undefined } = {
     retentionTime: 1000,
   }
