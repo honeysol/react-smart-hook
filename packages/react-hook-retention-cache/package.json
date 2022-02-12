@@ -9,7 +9,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "react": ">17"
+    "react": ">=17"
   },
   "devDependencies": {
     "@types/react": "^17.0.38",
