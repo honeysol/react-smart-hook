@@ -8,7 +8,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
+  "peerDependencies": {
+    "react": ">17"
+  },
+  "devDependencies": {
     "@types/react": "^17.0.38",
     "react": "^17.0.2"
   },
