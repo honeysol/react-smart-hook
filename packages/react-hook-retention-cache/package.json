@@ -1,6 +1,6 @@
 {
   "name": "@smart-hook/react-hook-retention-cache",
-  "version": "0.0.12",
+  "version": "0.0.13-alpha.0",
   "description": "React hooks to automatic cache retention.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -22,5 +22,8 @@
     "echo": "echo this is react-hook-retention-cache"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "files": [
+    "dist"
+  ]
 }

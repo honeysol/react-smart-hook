@@ -1,6 +1,6 @@
 {
   "name": "@smart-hook/react-smart-hook-firebase",
-  "version": "0.0.20-alpha.0",
+  "version": "0.0.20-alpha.1",
   "description": "firebase hooks with high performance",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -9,7 +9,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@smart-hook/react-hook-retention-cache": "^0.0.12",
+    "@smart-hook/react-hook-retention-cache": "^0.0.13-alpha.0",
     "firebase": "^9.6.3"
   },
   "scripts": {
@@ -19,5 +19,8 @@
     "echo": "echo this is react-smart-hook-firebase"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "files": [
+    "dist"
+  ]
 }
