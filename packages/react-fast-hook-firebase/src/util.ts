@@ -1,5 +1,11 @@
 export type Unsubscriber = () => void;
 
+let verbose = false;
+
+export const setVerbose = (_verbose: boolean) => {
+  verbose = _verbose;
+};
+
 export const createEmitter = <T>() => {
   const handlers = new Set<(value: T) => void>();
   return {
@@ -7,11 +13,11 @@ export const createEmitter = <T>() => {
       handlers.forEach((handler) => handler(value));
     },
     on(handler: (value: T) => void): Unsubscriber {
-      console.log("+ handlers size", handlers.size);
+      if (verbose) console.log("+ handlers size", handlers.size);
       handlers.add(handler);
       return () => {
         handlers.delete(handler);
-        console.log("- handlers size", handlers.size);
+        if (verbose) console.log("- handlers size", handlers.size);
       };
     },
   };
