@@ -18,7 +18,7 @@ export type AuthResult<D> = {
 
 class AuthStore<D> implements Store<AuthResult<D>> {
   public current: AuthResult<D> = {};
-  private emitter = createEmitter<AuthResult<D>>();
+  private emitter = createEmitter<AuthResult<D>>("AuthStore");
   private unsubscriber: Unsubscriber;
   constructor(auth: Auth, projector: (user?: User) => D) {
     this.unsubscriber = onIdTokenChanged(
@@ -49,14 +49,12 @@ class AuthStore<D> implements Store<AuthResult<D>> {
 export const createAuthHook = <D>(
   auth: Auth,
   projector: (user?: User) => D,
-  { retentionTime }: { retentionTime: number | undefined } = {
-    retentionTime: 1000,
-  }
+  { retentionTime }: { retentionTime?: number } = {}
 ) => {
   const cache = retentionCache({
     generator: (_param: true) => new AuthStore<D>(auth, projector),
     cleanUp: (v) => v.close(),
-    retentionTime,
+    retentionTime: retentionTime || 1000,
   });
   return createStoreCacheHook(cache, {} as never).bind(null, true);
 };

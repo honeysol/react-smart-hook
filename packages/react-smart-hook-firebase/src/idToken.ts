@@ -20,7 +20,7 @@ let isFirstTime = true;
 
 class IdTokenStore<D> implements Store<IdTokenResult<D>> {
   public current: IdTokenResult<D> = {};
-  private emitter = createEmitter<IdTokenResult<D>>();
+  private emitter = createEmitter<IdTokenResult<D>>("IdTokenStore");
   private unsubscriber: Unsubscriber;
   constructor(
     auth: Auth,
@@ -68,14 +68,12 @@ class IdTokenStore<D> implements Store<IdTokenResult<D>> {
 export const createIdTokenHook = <D>(
   auth: Auth,
   projector: (user?: User, claims?: ParsedToken) => D,
-  { retentionTime }: { retentionTime: number | undefined } = {
-    retentionTime: 1000,
-  }
+  { retentionTime }: { retentionTime?: number } = {}
 ) => {
   const cache = retentionCache({
     generator: (_param: true) => new IdTokenStore<D>(auth, projector),
     cleanUp: (v) => v.close(),
-    retentionTime,
+    retentionTime: retentionTime || 1000,
   });
   return createStoreCacheHook(cache, {} as never).bind(null, true);
 };

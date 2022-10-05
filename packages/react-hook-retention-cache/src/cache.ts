@@ -125,3 +125,30 @@ export const useCacheItem = <V>(item: RetentionItem<V>) => {
   }, [item]);
   return item.value;
 };
+
+export const useMultipleCache = <V, P>(
+  params: Record<string, P | undefined | null>,
+  cache: RetentionCache<V, P>
+) => {
+  const items = useMemo(() => {
+    return Object.fromEntries(
+      Object.entries(params).map(([key, param]) => {
+        return [key, param == null ? undefined : cache.getItem(param)];
+      })
+    );
+  }, [cache, params]);
+  useEffect(() => {
+    const unsubscribers = Object.values(items).map((item) => item?.subscribe);
+    () => {
+      unsubscribers.forEach((unsubscriber) => unsubscriber?.());
+    };
+  }, [items]);
+  const values = useMemo(() => {
+    return Object.fromEntries(
+      Object.entries(items).map(([key, item]) => {
+        return [key, item?.value];
+      })
+    );
+  }, [items]);
+  return values;
+};
