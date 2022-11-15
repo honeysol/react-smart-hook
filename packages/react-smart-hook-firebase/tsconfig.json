@@ -3,6 +3,5 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "rootDir": "src"
-  },
-  "references": [{ "path": "../react-hook-retention-cache" }]
+  }
 }
