@@ -4,14 +4,8 @@ import {
   type FirestoreError,
   onSnapshot,
 } from "firebase/firestore";
-import {
-  retentionCache,
-  createStoreCacheHook,
-  createMultipleStoreCacheHook,
-} from "@smart-hook/react-hook-retention-cache";
+import { retentionCache } from "@smart-hook/react-hook-retention-cache";
 import { createEmitter, type Unsubscriber } from "./util";
-
-type emptyObject = { [P in string]: never };
 
 export type QueryResult<D> = {
   snapshot?: QuerySnapshot<D>;
@@ -20,6 +14,7 @@ export type QueryResult<D> = {
   ref: Query<D>;
   loading?: boolean;
 };
+export type EmptyObject = { [P in string]: never };
 
 class QueryStore<D> {
   public current: QueryResult<D>;
@@ -64,75 +59,27 @@ export type UseQueryOption = {
   retentionTime?: number | undefined;
 };
 
-const createQueryCacheWithParams = <D, P>(
-  refGenerator: (params: P) => Query<D>,
-  { withData, retentionTime }: UseQueryOption = {}
-) =>
-  retentionCache({
-    generator: (params: P) =>
-      new QueryStore<D>(refGenerator(params), withData !== false),
-    cleanUp: (v) => v.close(),
-    retentionTime: retentionTime || 1000,
-  });
+export const getQueryCache = <D, P = undefined>(
+  { withData, retentionTime }: UseQueryOption = {},
+  refGenerator?: (params: P) => Query<D>
+) => {
+  let generator: (params: P & Query<D>) => QueryStore<D> = (query: Query<D>) =>
+    new QueryStore<D>(query, withData !== false);
 
-export const createQueryHook = <D, P>(
-  refGenerator: (params: P) => Query<D>,
-  { withData, retentionTime }: UseQueryOption = {}
-) =>
-  createStoreCacheHook(
-    createQueryCacheWithParams(refGenerator, { withData, retentionTime }),
-    {} as emptyObject
-  );
+  let serializer = undefined;
 
-export const createMultipleQueryHook = <D, P>(
-  refGenerator: (params: P) => Query<D>,
-  { withData, retentionTime }: UseQueryOption = {}
-) =>
-  createMultipleStoreCacheHook(
-    createQueryCacheWithParams(refGenerator, { withData, retentionTime }),
-    {} as emptyObject
-  );
-
-const createQueryCache = <D>(
-  refGenerator: () => Query<D>,
-  { withData, retentionTime }: UseQueryOption = {}
-) =>
-  retentionCache({
-    generator: () => new QueryStore<D>(refGenerator(), withData !== false),
-    cleanUp: (v) => v.close(),
-    retentionTime: retentionTime || 1000,
-  });
-
-export const createFixedQueryHook = <D>(
-  refGenerator: () => Query<D>,
-  { withData, retentionTime }: UseQueryOption = {}
-) =>
-  createStoreCacheHook(
-    createQueryCache(refGenerator, { withData, retentionTime }),
-    {} as never
-  ).bind(null, true);
-
-const createQueryRefCache = <D>({
-  withData,
-  retentionTime,
-}: UseQueryOption = {}) =>
-  retentionCache({
-    generator: (query: Query<D>) =>
-      new QueryStore<D>(query, withData !== false),
+  if (refGenerator) {
+    generator = (params: P) =>
+      new QueryStore<D>(refGenerator(params), withData !== false);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    serializer: (query: Query<D>) => (query as any)._query,
-    cleanUp: (v) => v.close(),
+    serializer = (query: Query<D>) => (query as any)._query;
+  }
+
+  return retentionCache({
+    generator,
+    serializer,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    cleanUp: (v: any) => v.close(),
     retentionTime: retentionTime || 1000,
   });
-
-// experimental. using private API (Query._query)
-export const createQueryRefHook = (({
-  withData,
-  retentionTime,
-}: UseQueryOption = {}) =>
-  createStoreCacheHook(
-    createQueryRefCache({ withData, retentionTime }),
-    {} as emptyObject
-  )) as (
-  options?: UseQueryOption
-) => <D>(params: Query<D> | undefined | null) => QueryResult<D> | emptyObject;
+};

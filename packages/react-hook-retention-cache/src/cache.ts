@@ -105,7 +105,7 @@ class RetentionCache<V, P> {
 
 export type { RetentionCache };
 
-export const useCache = <V, P>(
+export const useCachedValue = <V, P>(
   param: P | undefined | null,
   cache: RetentionCache<V, P>
 ) => {
@@ -118,6 +118,8 @@ export const useCache = <V, P>(
   }, [item]);
   return item?.value;
 };
+/** @deprecated */
+export const useCache = useCachedValue;
 
 export const useCacheItem = <V>(item: RetentionItem<V>) => {
   useEffect(() => {
@@ -126,7 +128,7 @@ export const useCacheItem = <V>(item: RetentionItem<V>) => {
   return item.value;
 };
 
-export const useMultipleCache = <V, P>(
+export const useMultipleCachedValues = <V, P>(
   params: Record<string, P | undefined | null>,
   cache: RetentionCache<V, P>
 ) => {

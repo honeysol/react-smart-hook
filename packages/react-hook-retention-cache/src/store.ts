@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { RetentionCache, useCache, useMultipleCache } from "./cache";
+import {
+  RetentionCache,
+  useCachedValue,
+  useMultipleCachedValues,
+} from "./cache";
 
 type Unsubscriber = () => void;
 
@@ -27,9 +31,11 @@ export const useMultipleStore = <C, V>(
   stores: Record<string, Store<C> | undefined>,
   defaultValue: V
 ) => {
-  const [content, setContent] = useState<Record<string, C | undefined | V>>({});
+  const [contents, setContents] = useState<Record<string, C | undefined | V>>(
+    {}
+  );
   useMemo(() => {
-    setContent(
+    setContents(
       Object.fromEntries(
         Object.entries(stores).map(([key, store]) => [
           key,
@@ -41,8 +47,8 @@ export const useMultipleStore = <C, V>(
   useEffect(() => {
     const unsubscribers = Object.entries(stores).map(([key, store]) => {
       return store?.on((value) => {
-        setContent((content) => {
-          return { ...content, [key]: value };
+        setContents((contents) => {
+          return { ...contents, [key]: value };
         });
       });
     });
@@ -50,14 +56,14 @@ export const useMultipleStore = <C, V>(
       unsubscribers.forEach((unsubscriber) => unsubscriber?.());
     };
   }, [stores]);
-  return content;
+  return contents;
 };
 
 export function useStoreCache<S extends Store<unknown>, P>(
   cache: RetentionCache<S, P>,
   params: P | undefined | null
 ) {
-  const store = useCache(params, cache) as Store<ContentOfStore<S>>;
+  const store = useCachedValue(params, cache) as Store<ContentOfStore<S>>;
   return useStore(store) || undefined;
 }
 
@@ -66,7 +72,7 @@ export function useMultipleStoreCache<S extends Store<unknown>, P, V>(
   params: Record<string, P | undefined | null>,
   defaultValue: V
 ) {
-  const stores = useMultipleCache(params, cache) as Record<
+  const stores = useMultipleCachedValues(params, cache) as Record<
     string,
     Store<ContentOfStore<S>>
   >;
