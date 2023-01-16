@@ -61,25 +61,26 @@ export type UseQueryOption = {
 
 export const getQueryCache = <D, P = undefined>(
   { withData, retentionTime }: UseQueryOption = {},
-  refGenerator?: (params: P) => Query<D>
+  refGenerator: (params: P) => Query<D>
 ) => {
-  let generator: (params: P & Query<D>) => QueryStore<D> = (query: Query<D>) =>
-    new QueryStore<D>(query, withData !== false);
-
-  let serializer = undefined;
-
-  if (refGenerator) {
-    generator = (params: P) =>
-      new QueryStore<D>(refGenerator(params), withData !== false);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    serializer = (query: Query<D>) => (query as any)._query;
-  }
-
   return retentionCache({
-    generator,
-    serializer,
+    generator: (params: P) =>
+      new QueryStore<D>(refGenerator(params), withData !== false),
+    cleanUp: (v) => v.close(),
+    retentionTime: retentionTime || 1000,
+  });
+};
+
+export const getQueryRefCache = <D>({
+  withData,
+  retentionTime,
+}: UseQueryOption = {}) => {
+  return retentionCache({
+    generator: (query: Query<D>) =>
+      new QueryStore<D>(query, withData !== false),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    cleanUp: (v: any) => v.close(),
+    serializer: (query: Query<D>) => (query as any)._query,
+    cleanUp: (v) => v.close(),
     retentionTime: retentionTime || 1000,
   });
 };
