@@ -4,6 +4,7 @@ import {
   useCachedValue,
   useMultipleCachedValues,
 } from "./cache";
+import { useStateWithDeps } from "./util";
 
 type Unsubscriber = () => void;
 
@@ -15,35 +16,30 @@ export interface Store<C> {
 export type ContentOfStore<S> = S extends Store<infer C> ? C : never;
 
 export const useStore = <C>(store: Store<C> | undefined) => {
-  const [content, setContent] = useState<C | undefined>(store?.current);
-  useMemo(() => {
-    setContent(store?.current);
-  }, [store]);
+  const [_content, setContent] = useState<C | undefined>(store?.current);
   useEffect(() => {
     return store?.on((value) => {
       setContent(value);
     });
   }, [store]);
-  return content;
+  return store?.current;
 };
 
 export const useMultipleStore = <C, V>(
   stores: Record<string, Store<C> | undefined>,
   defaultValue: V
 ) => {
-  const [contents, setContents] = useState<Record<string, C | undefined | V>>(
-    {}
-  );
-  useMemo(() => {
-    setContents(
-      Object.fromEntries(
-        Object.entries(stores).map(([key, store]) => [
-          key,
-          store?.current || defaultValue,
-        ])
-      )
+  const defaultContent = useMemo(() => {
+    return Object.fromEntries(
+      Object.entries(stores).map(([key, store]) => [
+        key,
+        store?.current || defaultValue,
+      ])
     );
   }, [stores]);
+  const [contents, setContents] = useStateWithDeps<
+    Record<string, C | undefined | V>
+  >(defaultContent, [defaultContent]);
   useEffect(() => {
     const unsubscribers = Object.entries(stores).map(([key, store]) => {
       return store?.on((value) => {
