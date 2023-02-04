@@ -59,46 +59,72 @@ export type UseDocumentOption = {
   retentionTime?: number | undefined;
 };
 
-export function createDocumentHook<D, P>(
+export function getDocumentCache<D, P>(
   refGenerator: (params: P) => DocumentReference<D>,
   { withData, retentionTime }: UseDocumentOption = {}
 ) {
-  const cache = retentionCache({
+  return retentionCache({
     generator: (params: P) =>
       new DocumentStore<D>(refGenerator(params), withData !== false),
     cleanUp: (v) => v.close(),
     retentionTime: retentionTime || 1000,
   });
+}
+
+export function createDocumentHook<D, P>(
+  refGenerator: (params: P) => DocumentReference<D>,
+  { withData, retentionTime }: UseDocumentOption = {}
+) {
+  const cache = getDocumentCache(refGenerator, {
+    withData,
+    retentionTime,
+  });
   return createStoreCacheHook(cache, {} as emptyObject);
+}
+
+export function createFixedDocumentCache<D>(
+  refGenerator: () => DocumentReference<D>,
+  { withData, retentionTime }: UseDocumentOption = {}
+) {
+  return retentionCache({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    generator: (_param: true) =>
+      new DocumentStore<D>(refGenerator(), withData !== false),
+    cleanUp: (v) => v.close(),
+    retentionTime: retentionTime || 1000,
+  });
 }
 
 export function createFixedDocumentHook<D>(
   refGenerator: () => DocumentReference<D>,
   { withData, retentionTime }: UseDocumentOption = {}
 ) {
-  const cache = retentionCache({
-    generator: (_param: true) =>
-      new DocumentStore<D>(refGenerator(), withData !== false),
-    cleanUp: (v) => v.close(),
-    retentionTime: retentionTime || 1000,
+  const cache = createFixedDocumentCache(refGenerator, {
+    withData,
+    retentionTime,
   });
   return createStoreCacheHook(cache, {} as never).bind(null, true);
 }
 
-export const createDocumentRefHook = (<D>({
+export const getDocumentRefCache = <D>({
   withData,
   retentionTime,
 }: UseDocumentOption = {}) => {
-  const cache = retentionCache({
+  return retentionCache({
     generator: (doc: DocumentReference<D>) =>
       new DocumentStore<D>(doc, withData !== false),
     serializer: (doc: DocumentReference<D>) => doc.path,
     cleanUp: (v) => v.close(),
     retentionTime: retentionTime || 1000,
   });
-  return createStoreCacheHook(cache, {} as emptyObject);
-}) as (
-  options?: UseDocumentOption
-) => <D>(
-  params: DocumentReference<D> | undefined | null
-) => DocumentResult<D> | emptyObject;
+};
+
+export const createDocumentRefHook = ({
+  withData,
+  retentionTime,
+}: UseDocumentOption = {}) => {
+  const cache = getDocumentRefCache({ withData, retentionTime });
+  return createStoreCacheHook(cache, {} as emptyObject) as <D>(
+    params: DocumentReference<D> | undefined | null
+  ) => DocumentResult<D> | emptyObject;
+};
