@@ -101,6 +101,10 @@ class RetentionCache<V, P> {
       })()
     );
   }
+  getCachedItem(param: P): RetentionItem<V> | undefined {
+    const key = this.serializer(param);
+    return this.cache.get(key);
+  }
 }
 
 export type { RetentionCache };
