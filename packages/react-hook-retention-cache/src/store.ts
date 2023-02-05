@@ -44,7 +44,11 @@ export const useMultipleStore = <C, V>(
     const unsubscribers = Object.entries(stores).map(([key, store]) => {
       return store?.on((value) => {
         setContents((contents) => {
-          return { ...contents, [key]: value };
+          if (contents?.[key] !== value) {
+            return { ...contents, [key]: value };
+          } else {
+            return contents;
+          }
         });
       });
     });
