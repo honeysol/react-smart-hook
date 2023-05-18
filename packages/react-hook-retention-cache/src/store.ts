@@ -4,7 +4,7 @@ import {
   useCachedValue,
   useMultipleCachedValues,
 } from "./cache";
-import { useStateWithDeps } from "./util";
+import { useStateWithDeps } from "@smart-hook/react-hook-deps";
 
 type Unsubscriber = () => void;
 
