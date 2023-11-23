@@ -4,8 +4,8 @@ import {
   createStoreCacheHook,
   Store,
   retentionCache,
+  createEmitter,
 } from "@smart-hook/react-hook-retention-cache";
-import { createEmitter } from "./util";
 
 import deepEqual from "fast-deep-equal";
 

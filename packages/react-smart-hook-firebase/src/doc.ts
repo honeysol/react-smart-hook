@@ -7,8 +7,9 @@ import {
 import {
   retentionCache,
   createStoreCacheHook,
+  createEmitter,
+  type Unsubscriber,
 } from "@smart-hook/react-hook-retention-cache";
-import { createEmitter, type Unsubscriber } from "./util";
 
 type emptyObject = { [P in string]: never };
 

@@ -7,8 +7,9 @@ import {
 import {
   createStoreCacheHook,
   retentionCache,
+  createEmitter,
+  type Unsubscriber,
 } from "@smart-hook/react-hook-retention-cache";
-import { createEmitter, type Unsubscriber } from "./util";
 
 export type QueryResult<D> = {
   snapshot?: QuerySnapshot<D>;

@@ -4,12 +4,11 @@ import {
   createStoreCacheHook,
   Store,
   retentionCache,
+  createEmitter,
+  type Unsubscriber,
 } from "@smart-hook/react-hook-retention-cache";
-import { createEmitter } from "./util";
 
 import deepEqual from "fast-deep-equal";
-
-type Unsubscriber = () => void;
 
 export type AuthResult<D> = {
   error?: Error;

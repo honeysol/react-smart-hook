@@ -14,5 +14,9 @@
     "sourceMap": true,
     "composite": true,
     "typeRoots": ["./node_modules/@types"]
-  }
+  },
+  "references": [
+    { "path": "./packages/react-smart-hook-firebase" },
+    { "path": "./packages/react-smart-hook" }
+  ]
 }

@@ -49,10 +49,22 @@ export const createEmitter = <T>(debug?: unknown) => {
         }
       };
     },
+    close() {
+      if (process.env.NODE_ENV === "development") {
+        if (verbose) {
+          totalCounter -= handlers.size;
+          addCounter(debug, -handlers.size);
+          console.log("close", debug, totalCounter, getCounter(debug));
+        }
+      }
+      handlers.clear();
+    },
   };
 };
 
 if (process.env.NODE_ENV === "development") {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any)["__react_smart_hook_firebase_debug_counterMap"] = counterMap;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any)["__react_smart_hook_firebase_debug_setVerbose"] = setVerbose;
 }
