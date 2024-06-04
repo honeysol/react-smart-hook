@@ -13,7 +13,7 @@
     "firebase": "^9.6.3"
   },
   "peerDependencies": {
-    "firebase": "^10.12.2"
+    "firebase": "^9.6.3 || ^10.0.0"
   },
   "scripts": {
     "build": "rm -rf ./dist; rollup -c",
