@@ -29,8 +29,10 @@ class QueryStore<D> {
     this.ref = queryRef;
     this.current = { ref: this.ref, loading: true };
     this.emitter = createEmitter<QueryResult<D>>(queryRef);
-    this.unsubscriber = onSnapshot<D>(queryRef, {
-      next: (snapshot: QuerySnapshot<D>) => {
+    this.unsubscriber = onSnapshot(
+      queryRef,
+      (snapshot: QuerySnapshot<D>) => {
+        // Success callback
         if (withData) {
           this.current = {
             snapshot,
@@ -42,11 +44,12 @@ class QueryStore<D> {
         }
         this.emitter.emit(this.current);
       },
-      error: (error: FirestoreError) => {
+      (error) => {
+        // Error handling
         this.current = { error, ref: this.ref };
         this.emitter.emit(this.current);
-      },
-    });
+      }
+    );
   }
 
   close() {

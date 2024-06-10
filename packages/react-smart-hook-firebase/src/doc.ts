@@ -30,8 +30,10 @@ class DocumentStore<D> {
     this.ref = docRef;
     this.emitter = createEmitter<DocumentResult<D>>(docRef);
     this.current = { ref: this.ref, loading: true };
-    this.unsubscriber = onSnapshot<D>(docRef, {
-      next: (snapshot: DocumentSnapshot<D>) => {
+    this.unsubscriber = onSnapshot(
+      docRef,
+      (snapshot) => {
+        // Success callback
         if (withData) {
           this.current = { snapshot, ref: this.ref, data: snapshot.data() };
         } else {
@@ -39,11 +41,12 @@ class DocumentStore<D> {
         }
         this.emitter.emit(this.current);
       },
-      error: (error: FirestoreError) => {
+      (error) => {
+        // Error handling
         this.current = { error, ref: this.ref };
         this.emitter.emit(this.current);
-      },
-    });
+      }
+    );
   }
 
   close() {
