@@ -10,10 +10,7 @@
   },
   "dependencies": {
     "@smart-hook/react-hook-retention-cache": "^0.0.13",
-    "firebase": "^9.6.3"
-  },
-  "peerDependencies": {
-    "firebase": "^9.6.3 || ^10.0.0"
+    "firebase": "^10.12.2"
   },
   "scripts": {
     "build": "rm -rf ./dist; rollup -c",
