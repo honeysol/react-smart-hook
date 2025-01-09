@@ -1,4 +1,5 @@
 import {
+  DocumentData,
   type DocumentReference,
   type DocumentSnapshot,
   type FirestoreError,
@@ -30,7 +31,7 @@ class DocumentStore<D> {
     this.ref = docRef;
     this.emitter = createEmitter<DocumentResult<D>>(docRef);
     this.current = { ref: this.ref, loading: true };
-    this.unsubscriber = onSnapshot<D>(docRef, {
+    this.unsubscriber = onSnapshot<D, DocumentData>(docRef, {
       next: (snapshot: DocumentSnapshot<D>) => {
         if (withData) {
           this.current = { snapshot, ref: this.ref, data: snapshot.data() };
@@ -62,7 +63,7 @@ export type UseDocumentOption = {
 
 export function getDocumentCache<D, P>(
   refGenerator: (params: P) => DocumentReference<D>,
-  { withData, retentionTime }: UseDocumentOption = {}
+  { withData, retentionTime }: UseDocumentOption = {},
 ) {
   return retentionCache({
     generator: (params: P) =>
@@ -74,7 +75,7 @@ export function getDocumentCache<D, P>(
 
 export function createDocumentHook<D, P>(
   refGenerator: (params: P) => DocumentReference<D>,
-  { withData, retentionTime }: UseDocumentOption = {}
+  { withData, retentionTime }: UseDocumentOption = {},
 ) {
   const cache = getDocumentCache(refGenerator, {
     withData,
@@ -85,7 +86,7 @@ export function createDocumentHook<D, P>(
 
 export function createFixedDocumentCache<D>(
   refGenerator: () => DocumentReference<D>,
-  { withData, retentionTime }: UseDocumentOption = {}
+  { withData, retentionTime }: UseDocumentOption = {},
 ) {
   return retentionCache({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -98,7 +99,7 @@ export function createFixedDocumentCache<D>(
 
 export function createFixedDocumentHook<D>(
   refGenerator: () => DocumentReference<D>,
-  { withData, retentionTime }: UseDocumentOption = {}
+  { withData, retentionTime }: UseDocumentOption = {},
 ) {
   const cache = createFixedDocumentCache(refGenerator, {
     withData,
@@ -126,6 +127,6 @@ export const createDocumentRefHook = ({
 }: UseDocumentOption = {}) => {
   const cache = getDocumentRefCache({ withData, retentionTime });
   return createStoreCacheHook(cache, {} as emptyObject) as <D>(
-    params: DocumentReference<D> | undefined | null
+    params: DocumentReference<D> | undefined | null,
   ) => DocumentResult<D> | emptyObject;
 };
